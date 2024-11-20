@@ -14,8 +14,8 @@ options.headless = True  # Run browser in headless mode
 driver = webdriver.Chrome(options=options)  # Make sure to download and use the appropriate WebDriver
 
 # URL of the Power BI Dashboard
-dashboard_url_1 = "http://t3vw077:8090/DigitalBIReports/powerbi/AAT_report?rs:embed=true"
-dashboard_url_2 = "http://t3vw077:8090/DigitalBIReports/powerbi/AAT_report?rs:embed=true"
+dashboard_url_1 = "url for first dashboard"
+dashboard_url_2 = "urk for second dashboard"
 
 dashboard_url = [dashboard_url_1,dashboard_url_2]
 sheets_to_capture = ["Revenue amount", "recovery_labs"]
@@ -40,13 +40,13 @@ olApp = win32.Dispatch("Outlook.Application")
 olNS = olApp.GetNameSpace("MAPI")
 mail_item = olApp.CreateItem(0)
 mail_item.BodyFormat = 1
-mail_item.Sender = "shayan.r@mtnirancell.ir"
-mail_item.To = "sana.a@mtnirancell.ir"
-mail_item.CC = "sana.a@mtnirancell.ir"
-mail_item.Subject = "AAT_Report"
-mail_item.HTMLBody = "<h4>Dear Larry,<br>This is an Automatic email.<br>You can find AAT report as below:</h4>"
+mail_item.Sender = "sender email"
+mail_item.To = "reciever"
+mail_item.CC = "CC email"
+mail_item.Subject = "Subject"
+mail_item.HTMLBody = "Body of the email"
 
-base_path = "E:\\Irancell\\Digital\\Automatic powe BI send email\\"
+base_path = "path for your Python file"
 
 for i , screenshot in enumerate(screenshots,0):
     img_path = f"{base_path}{screenshot}"
