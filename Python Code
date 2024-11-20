@@ -1,0 +1,78 @@
+import pandas as pd
+import matplotlib.pyplot as plt
+
+# connect to outlook
+import win32com.client as client
+outlook = client.Dispatch("outlook.application")
+
+# reading file
+timeplan = pd.read_excel("E:/Irancell/Digital/DG Project table.xlsx",sheet_name=-1)
+Recipient = pd.read_excel("E:/Irancell/Digital/DG Project table.xlsx",sheet_name="Recipients")
+
+for i in range (timeplan.shape[0]):
+    date = timeplan.iloc[i,0][4:-1]
+
+    # create a new calendar item
+    # with the index 1 you can create an appointment
+    cal_item = outlook.CreateItem(1)
+
+#Let's manipulate some base properties
+    cal_item.subject = str("Status of DG sizing project: {} at: {}".format(timeplan.iloc[i,1],timeplan.iloc[i,2]))
+    cal_item.body = ""
+    cal_item.location = "Larry's Office"
+    splitted_subjects = timeplan.iloc[i,1].split(" / ")
+    if "PLACE HOLDER" in splitted_subjects:
+        splitted_subjects.remove("PLACE HOLDER")
+    if not splitted_subjects:
+        continue
+    attendees = []
+    for j in splitted_subjects:
+        x = (Recipient.loc[Recipient["Products"]== j ,"Attendees"]).tolist()
+        attendees.extend(x[0].split(","))
+    attendees = list(set(attendees))
+    
+    cal_item.start = "{} {}".format(date,(timeplan.iloc[i,2].split(" ",1)[0]))
+
+    cal_item.duration = 60
+
+    cal_item.MeetingStatus = 1
+
+    required = cal_item.Recipients.add(";".join(attendees))
+    required.Type = 1
+
+    cal_item.display()
+    #cal_item.send()
+    
+for i in range (timeplan.shape[0]):
+    date = timeplan.iloc[i,0][4:-1]
+
+    cal_item = outlook.CreateItem(1)
+
+#Let's manipulate some base properties
+    cal_item.subject = str("Status of DG sizing project: {} at: {}".format(timeplan.iloc[i,3],timeplan.iloc[i,4]))
+    cal_item.body = ""
+    cal_item.location = "Larry's Office"
+    
+    splitted_subjects = timeplan.iloc[i,3].split(" / ")
+    if "PLACE HOLDER" in splitted_subjects:
+        splitted_subjects.remove("PLACE HOLDER")
+    if not splitted_subjects:
+        continue
+    attendees = []
+    for j in splitted_subjects:
+        x = (Recipient.loc[Recipient["Products"]== j ,"Attendees"]).tolist()
+        attendees.extend(x[0].split(","))
+    attendees = list(set(attendees))
+    
+    cal_item.start = "{} {}".format(date,(timeplan.iloc[i,4].split(" ",1)[0]))
+
+    cal_item.duration = 60
+
+    cal_item.MeetingStatus = 1
+
+    required = cal_item.Recipients.add(";".join(attendees))
+    required.Type = 1
+
+# with the display method you can see the results of your work
+    cal_item.display()
+#    cal_item.send()
